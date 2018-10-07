@@ -1,0 +1,29 @@
+//import packages
+import pandas as pd
+import re
+import string
+pd.set_option('display.max_colwidth',100)
+stopwords = nltk.corpus.stopwords.words('english')
+//read data from csv file (uploaded separately)
+data= pd.read_csv ('/Users/sunnypanjabi/Downloads/Ex_Files_NLP_Python_ML_EssT 2/Exercise Files/Ch05/05_12/End/SMSSpamCollection.tsv',sep='\t',header=None)
+data.columns=['label','body_text']
+data.head()
+
+
+//a function to remove punctuations, split text down to individual words
+def clean_text(text):
+    text = "".join([word for word in text if word not in string.punctuation])
+    tokens = re.split('\W+', text)
+    text = [word for word in tokens if word not in stopwords]
+    return text
+
+data['body_text_nostop'] = data['body_text'].apply(lambda x: clean_text(x.lower()))
+data.head()
+
+//lemmatizing a key concept in natural language processing which uses a common synonym for a group of words with plurals, suffixes etc.
+
+def lemmatizing (tokenized_text):
+    text = [vn.lemmatize(word) for word in tokenized_text]
+    return text
+data['body_text_lemmatized'] = data['body_text_nostop'].apply(lambda x: lemmatizing(x))
+data.head(10)
